@@ -1,0 +1,13 @@
+lint:
+  image: <your-docker-registry-to-docker-image-from-dockerfile>
+  stage: test
+  retry: 2
+  inherit:
+    default: false
+  variables:
+    # create secret_token in gitlab for comments from linter in Gitlab-MRs
+    PRONTO_GITLAB_API_PRIVATE_TOKEN: $PRONTO_SECRET_TOKEN
+  only:
+    - merge_requests
+  script:
+    - pronto run -c origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME -f gitlab gitlab_mr
